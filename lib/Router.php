@@ -42,16 +42,22 @@ class Router
 
 		// try custom routes
 		foreach ($routes as $route) {
-			if (strpos($route["url"], $normalizedUri) === 0) {
+            if ($hasArea) {
+                $normalizedUri = strstr($normalizedUri, "/");
+                $normalizedUri = substr($normalizedUri, 1);
+            }
 
-				$result['area'] = $route['area'];
-				$result['controller'] = $route['controller']."Controller";
+            if (Router::startsWith($normalizedUri, $route["url"])) {
+                if ($hasArea) {
+				    $result['area'] = $route['area'];
+                }
+				$result['controller'] = $route['controller'];
 				$result['method'] = $route['method'];
 				
 				$paramsUri = str_replace($route['url'], "", $normalizedUri);
 				$params = explode("/", $paramsUri);
 
-				$result['parameters'] = $params;
+				$result['parameters'] = array_filter($params);
 
 				return $result;
 			}
@@ -94,11 +100,15 @@ class Router
 		}
 
 		$appRoutes = include PATH_TO_APP."config".DS."routes.php";
-		$result = array_merge($appRoutes);
+		$result = array_merge($result, $appRoutes);
 
 		return $result;
 	}
 
+    static private function startsWith($haystack, $needle) {
+        // search backwards starting from haystack length characters from the end
+        return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
+    }
 }
 
 ?>
