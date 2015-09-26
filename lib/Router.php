@@ -42,8 +42,8 @@ class Router
 
 		// try custom routes
 		foreach ($routes as $route) {
-			if (strpos($route->url, $normalizeUri) == 0) {
-				
+			if (strpos($route["url"], $normalizedUri) === 0) {
+
 				$result['area'] = $route['area'];
 				$result['controller'] = $route['controller']."Controller";
 				$result['method'] = $route['method'];
@@ -58,25 +58,42 @@ class Router
 		}
 
 		// default route
-		$result['controller'] = $normalizedSplitUri[0]."Controller";
-		$result['method'] = $normalizedSplitUri[1] or 'index';
-		if ($normalizedSplitUri[1]) {
-			$result['parameters'] = array_slice($normalizedSplitUri, 2);
-		}
+        if ($hasArea) {
+            $result['area'] = $normalizedSplitUri[0];
+            $result['controller'] = $normalizedSplitUri[1]."Controller";
+            if (isset($normalizedSplitUri[2])) {
+                $result['method'] = $normalizedSplitUri[2];
+                $result['parameters'] = array_slice($normalizedSplitUri, 3);
+            }
+            else {
+                $result['method'] = 'index';
+            }
+        }
+        else {
+            $result['controller'] = $normalizedSplitUri[0]."Controller";
+            if (isset($normalizedSplitUri[1])) {
+                $result['method'] = $normalizedSplitUri[1];
+                $result['parameters'] = array_slice($normalizedSplitUri, 2);
+            }
+            else {
+                $result['method'] = 'index';
+            }
+        }
+
+        return $result;
 	}
 
 	static public function getRoutes()
 	{
-		$result = array();
-
-		$areas = scandir("..".DS."areas");
+        $result = array();
+		$areas = scandir(PATH_TO_APP."areas");
 		foreach ($areas as $area) {
 			if ($area == "." || $area == "..") continue;
-			$currentAreaRoutes = include "..".DS."areas".DS.$area."config".DS."routes.php";
+			$currentAreaRoutes = include PATH_TO_APP."areas".DS.$area.DS."config".DS."routes.php";
 			$result = array_merge($result, $currentAreaRoutes);
 		}
 
-		$appRoutes = include "..".DS."config"."routes.php";
+		$appRoutes = include PATH_TO_APP."config".DS."routes.php";
 		$result = array_merge($appRoutes);
 
 		return $result;
