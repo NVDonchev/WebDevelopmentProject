@@ -54,7 +54,7 @@ class Router
 				$result['controller'] = $route['controller'];
 				$result['method'] = $route['method'];
 				
-				$paramsUri = str_replace($route['url'], "", $normalizedUri);
+				$paramsUri = str_ireplace($route['url'], "", $normalizedUri);
 				$params = explode("/", $paramsUri);
 
 				$result['parameters'] = array_filter($params);
@@ -106,6 +106,9 @@ class Router
 	}
 
     static private function startsWith($haystack, $needle) {
+        $haystack = strtolower($haystack);
+        $needle = strtolower($needle);
+
         // search backwards starting from haystack length characters from the end
         return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
     }
