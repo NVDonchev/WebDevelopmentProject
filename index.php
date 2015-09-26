@@ -5,6 +5,7 @@ define("APP_DIR_NAME", basename(dirname(__FILE__)));
 define("PATH_TO_APP", $_SERVER['DOCUMENT_ROOT'].DS.APP_DIR_NAME.DS);
 
 include "lib".DS."Router.php";
+include "lib".DS."View.php";
 
 // get route data
 $routeConfig = include "config".DS."routes.php";
@@ -25,8 +26,11 @@ else {
 }
 
 $controllerInstance = new $route['controller']();
-call_user_method($route['method'], $controllerInstance);
+$actionResult = call_user_func(array($controllerInstance, $route['method']));
 
 // Render view
-
+if (get_class($actionResult) === "View") {
+    $view = str_ireplace("Controller", "", $route['controller']).".php";
+    $actionResult->render($view);
+}
 ?>
