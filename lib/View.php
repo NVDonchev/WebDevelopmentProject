@@ -2,10 +2,15 @@
 
 class View
 {
-    private $model;
+    public $model;
+    public $viewName;
 
-    function __construct($model) {
+    function __construct($model, $viewName = null) {
         $this->model = $model;
+
+        if (isset($viewName)) {
+            $this->viewName = $viewName;
+        }
     }
 
     public function render($view) {

@@ -2,18 +2,39 @@
 
 class HomeController
 {
-	public function index()
-	{
-        $model =  "Hello from HomeController::index() !";
+    function __construct() {
+        include "BindingModels".DS."HelloBindingModel.php";
+        include "models".DS."HelloModel.php";
+    }
 
-        return new View($model);
+	public function index(HelloBindingModel $model)
+	{
+        if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            return new View($model, "formResults");
+        }
+        else {
+            $model = new HelloModel();
+
+            return new View($model, "personForm");
+        }
 	}
 
-	public function hello()
+	public function hello(HelloBindingModel $model)
 	{
-        $model = "Hello from HomeController::hello() !";
+        if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            return new View($model, "formResults");
+        }
+        else {
+            $model = new HelloModel();
 
-        return new View($model);
+            return new View($model, "personForm");
+        }
+    }
+
+
+    public function postPersonInfo(HelloBindingModel $model)
+    {
+        return new View($model, "formResults");
     }
 }
 
