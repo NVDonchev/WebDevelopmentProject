@@ -8,6 +8,8 @@ include "lib".DS."Router.php";
 include "lib".DS."View.php";
 include "lib".DS."AnnotationHelper.php";
 
+include "lib".DS."htmlRender".DS."htmlRender.php";
+
 // get route data
 $routeConfig = include "config".DS."routes.php";
 $route = Router::parseUri($_SERVER['REQUEST_URI']);
@@ -30,18 +32,31 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
     $reflection = new ReflectionMethod($controllerInstance, $route['method']);
     $param = $reflection->getParameters()[0];
 
-    $bindingClassName = $param->getClass();
-    $bindingClassInstance = new $bindingClassName->name();
+    $bindingClass = $param->getClass();
+    $bindingClassInstance = new $bindingClass->name();
 
-    $reflection = new ReflectionClass($bindingClassName->name);
-    foreach ($reflection->getProperties() as $prop) {
+    $reflection = new ReflectionClass($bindingClass->name);
+    $bindingClassProperties = $reflection->getProperties();
+    $postProperties = $_POST;
+
+    foreach ($bindingClassProperties as $prop) {
         $propertyName = $prop->getName();
 
-        foreach ($_POST as $name => $value) {
+        if (count($bindingClassProperties) !== count($postProperties)) {
+            die("Automatic binding of the post model failed for " . $bindingClass->name);
+        }
+
+        $isModelBindingOk = false;
+        foreach ($postProperties as $name => $value) {
             if ($name === $propertyName) {
                 $bindingClassInstance->$propertyName = $value;
+                $isModelBindingOk = true;
                 break;
             }
+        }
+
+        if (!$isModelBindingOk) {
+            die("Automatic binding of the post model failed for " . $bindingClass->name);
         }
     }
 
@@ -52,7 +67,7 @@ else {
 }
 
 // render view
-if (get_class($actionResult) === "View") {
+if (isset($actionResult) && get_class($actionResult) === "View") {
     $view = get_class($actionResult);
 
     $viewPath = null;
@@ -65,11 +80,13 @@ if (get_class($actionResult) === "View") {
         $viewPath = PATH_TO_APP."views".DS.$view;
     }
 
-    $expectedViewModel = explode("/", AnnotationHelper::getViewModelType($viewPath))[1];
+    if (isset($expectedViewModel)) {
+        $expectedViewModel = explode("/", AnnotationHelper::getViewModelType($viewPath)[1]);
 
-    if (get_class($actionResult->model) !== $expectedViewModel) {
-        die ("The view '" . explode(".", $view)[0] . "' expects a " . $expectedViewModel . " view model.
+        if (get_class($actionResult->model) !== $expectedViewModel) {
+            die ("The view '" . explode(".", $view)[0] . "' expects a " . $expectedViewModel . " view model.
         The actual one is " . get_class($actionResult->model). ".");
+        }
     }
 
     $actionResult->render($view);

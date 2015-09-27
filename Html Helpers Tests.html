@@ -1,15 +1,3 @@
-<!DOCTYPE HTML>
-<html>
-<body>
-
-<form action="home" method="post">
-    Name: <input type="text" name="name"><br>
-    Age: <input type="text" name="age"><br>
-    IsHungry: <input type="text" name="hungry"><br>
-
-    <input type="submit">
-</form>
-
 <!-- Begin form-->
 <br>
     <?php htmlRender::beginForm(array("action" => "action.php", "method" => "POST", "accept-charset" => "UTF-8")) ?>
@@ -53,8 +41,3 @@ Select Car: <?php htmlRender::DropDown(array("class" => "testClass"), array(
 <!-- EndForm -->
     <?php htmlRender::endForm() ?><br>
 <br>
-
-</body>
-</html>
-
-<?php
