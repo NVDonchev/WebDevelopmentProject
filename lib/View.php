@@ -13,9 +13,9 @@ class View
         }
     }
 
-    public function render($view) {
+    public function render($viewPath) {
         $model = $this->model;
 
-        include PATH_TO_APP."views".DS.$view;
+        include $viewPath;
     }
 }

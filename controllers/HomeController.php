@@ -1,27 +1,44 @@
 <?php 
 
-class HomeController
-{
+class HomeController extends BaseController {
     function __construct() {
-        include "bindingModels".DS."helloBindingModel.php";
     }
 
 	public function index()
 	{
-        return new View(null, "personForm");
+        if ($this->isLoggedIn()) {
+            return new View($this->products);
+        }
+        else {
+            $uniqueCategories = $this->getDistrictCategories();
+            return new View(array("products" => $this->products, "categories" => $uniqueCategories));
+        }
 	}
 
-	public function hello(HelloBindingModel $model)
-	{
-        if ($_SERVER['REQUEST_METHOD'] === "POST") {
-            return new View($model, "formResults");
+    public function filterProductsByCategory(FilterByCategoryBindingModel $model)
+    {
+        $filteredProducts = array();
+        foreach($this->products as $product) {
+            if ($product->category === $model->category)
+            array_push($filteredProducts, $product);
         }
+
+        $uniqueCategories = $this->getDistrictCategories();
+        return new View(array("products" => $filteredProducts, "categories" => $uniqueCategories));
     }
 
+    public function buyProduct(BuyProductBindingModel $model) {
+        $productId = $model->productId;
 
-    public function postPersonInfo(HelloBindingModel $model)
-    {
-        return new View($model, "formResults");
+        foreach ($this->products as $index => $product) {
+            if ($product->id == $productId && $product->quantity > 0) {
+                $this->products[$index]->quantity--;
+
+                header('Location: ../home');
+            }
+        }
+
+        die("Cannot buy this product.");
     }
 }
 
