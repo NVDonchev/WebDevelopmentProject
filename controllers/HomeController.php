@@ -2,43 +2,47 @@
 
 class HomeController extends BaseController {
     function __construct() {
+        parent::__construct();
+
+        include PATH_TO_APP.DS."models".DS."ProductsRepository.php";
+
+        $this->productsRepo = new ProductsRepository();
     }
 
 	public function index()
 	{
-        if ($this->isLoggedIn()) {
-            return new View($this->products);
+        $allProducts = $this->productsRepo->getAll();
+
+        if (!$this->isLoggedIn()) {
+            $this->redirectToUrl("authentication");
         }
-        else {
-            $uniqueCategories = $this->getDistrictCategories();
-            return new View(array("products" => $this->products, "categories" => $uniqueCategories));
-        }
+
+        $uniqueCategories = $this->productsRepo->getCategoryNames();
+        return new View(array("products" => $allProducts, "categories" => $uniqueCategories));
 	}
 
     public function filterProductsByCategory(FilterByCategoryBindingModel $model)
     {
-        $filteredProducts = array();
-        foreach($this->products as $product) {
-            if ($product->category === $model->category)
-            array_push($filteredProducts, $product);
-        }
+        $productsByCategory = $this->productsRepo->getByCategory($model->category);
+        $uniqueCategories = $this->productsRepo->getCategoryNames();
 
-        $uniqueCategories = $this->getDistrictCategories();
-        return new View(array("products" => $filteredProducts, "categories" => $uniqueCategories));
+        return new View(array("products" => $productsByCategory, "categories" => $uniqueCategories));
     }
 
     public function buyProduct(BuyProductBindingModel $model) {
         $productId = $model->productId;
 
-        foreach ($this->products as $index => $product) {
-            if ($product->id == $productId && $product->quantity > 0) {
-                $this->products[$index]->quantity--;
-
-                header('Location: ../home');
-            }
+        $productToEdit = $this->productsRepo->getById($productId);
+        if ($productToEdit->quantity > 0) {
+            $productToEdit->quantity--;
+        }
+        else {
+            die("Cannot buy this product.");
         }
 
-        die("Cannot buy this product.");
+        $this->productsRepo->editProduct($productId, $productToEdit);
+
+        $this->redirectToUrl("../home");
     }
 }
 

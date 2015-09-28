@@ -14,7 +14,7 @@ foreach($model["categories"] as $category) {
 htmlRender::beginForm(array("action"=>"home/filterProductsByCategory", "method"=>"POST"));
 htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
 ?>
-<input type="submit" value="Filter"><br>
+&nbsp;<input type="submit" value="Filter" class="btn btn-default"><br>
 <?php htmlRender::endForm(); ?>
 
 <br>
@@ -27,7 +27,7 @@ htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
         <th>Price</th>
         <th>Category</th>
         <th>Quantity</th>
-        <th>Buy</th>
+        <th>Select</th>
     </tr>
     <?php foreach( $model["products"] as $product ) :?>
         <tr>
@@ -40,7 +40,8 @@ htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
     <?php endforeach; ?>
 </table>
 <br>
-<input type="submit" value="Buy Selected"><br>
+<input type="submit" value="Add to Cart" class="btn btn-success"><br>
 <?php htmlRender::endForm(); ?>
+<br>
 
 <?php include PATH_TO_APP . "views/_footer.php"; ?>
