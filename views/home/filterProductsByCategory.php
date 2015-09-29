@@ -3,24 +3,27 @@
 
 <?php include PATH_TO_APP . "views/_header.php"; ?>
 
+<a href="../cart/showCart" class="btn btn-info">View Cart</a><br><br>
+
 <h3>Filtered Products</h3>
 
 <?php
 $categoriesArray = array();
-foreach($model["categories"] as $category) {
+foreach($model->categories as $category) {
     array_push($categoriesArray, array("value"=>$category, "content"=>ucfirst($category)));
 }
 
 htmlRender::beginForm(array("action"=>"filterProductsByCategory", "method"=>"POST"));
 htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
 ?>
-<input type="submit" value="Filter" class="btn btn-default"><br>
+&nbsp;<input type="submit" value="Filter" class="btn btn-default"><br>
+<?php htmlRender::checkBox(array("name"=>"getOnlyAvailable"));?> <label>Available only</label><br>
 <a href="../home">List All</a>
 <?php htmlRender::endForm(); ?>
 
 <br>
 
-<?php htmlRender::beginForm(array("action"=>"buyProduct", "method"=>"POST")); ?>
+<?php htmlRender::beginForm(array("action"=>"../cart/addToCart", "method"=>"POST")); ?>
 <table class="table">
     <tr>
         <th>Name</th>
@@ -29,7 +32,7 @@ htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
         <th>Quantity</th>
         <th>Select</th>
     </tr>
-    <?php foreach( $model["products"] as $product ) :?>
+    <?php foreach( $model->products as $product ) :?>
         <tr>
             <td><?php echo $product->name; ?></td>
             <td><?php echo $product->price; ?></td>

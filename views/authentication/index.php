@@ -1,14 +1,17 @@
 
 
 <br>
-<?php htmlRender::beginForm(array("action"=>"authentication/login", "method"=>"POST")); ?>
+<?php
+htmlRender::generateAntiForgeryToken();
+htmlRender::beginForm(array("action"=>"authentication/login", "method"=>"POST"));
+?>
     <table>
         <h3>Login Form</h3>
         <tr>
             <td>Username:</td><td><?php htmlRender::textField(array("name" => "username")) ?></td>
         </tr>
         <tr>
-            <td>Password::</td><td><?php htmlRender::passwordField(array("name" => "password")) ?></td>
+            <td>Password:</td><td><?php htmlRender::passwordField(array("name" => "password")) ?></td>
         </tr>
     </table>
     <input type="submit" value="Login">

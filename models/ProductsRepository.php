@@ -14,16 +14,24 @@ class ProductsRepository extends BaseRepository
         }
     }
 
-    public function getByCategory($category) {
+    public function getByCategory($category, $getAvailableOnly = false) {
         $filteredProducts = array();
-        foreach($this->products as $product) {
-            if ($product->category === $category)
-                array_push($filteredProducts, $product);
+
+        if ($getAvailableOnly) {
+            foreach($this->products as $product) {
+                if ($product->category === $category && $product->quantity > 0)
+                    array_push($filteredProducts, $product);
+            }
+        }
+        else {
+            foreach($this->products as $product) {
+                if ($product->category === $category)
+                    array_push($filteredProducts, $product);
+            }
         }
 
-        return $filteredProducts;
 
-        $uniqueCategories = $this->getDistrictCategories();
+        return $filteredProducts;
     }
 
     public function getCategoryNames() {

@@ -4,6 +4,7 @@ abstract class BaseRepository
 {
     protected $products;
     protected $users;
+    protected $cart;
 
     function __construct() {
         if (!isset($_SESSION["products"])) {
@@ -30,6 +31,15 @@ abstract class BaseRepository
                 new Product(20, "Laptop J1020", 690, "electronics", 5));
         }
         $this->products = $_SESSION["products"];
+
+        if (!isset($_SESSION["users"])) {
+            $_SESSION["users"] = array();
+        }
         $this->users = $_SESSION["users"];
+
+        if (!isset($_SESSION["cart"])) {
+            $_SESSION["cart"] = array();
+        }
+        $this->cart = $_SESSION["cart"];
     }
 }

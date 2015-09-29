@@ -29,4 +29,11 @@ abstract class BaseController {
     protected function isAdmin() {
         return isset($_SESSION['isAdmin']);
     }
+
+    protected function validateAntiForgeryToken() {
+        if ($_POST['my_token'] !== $_SESSION['my_token'])
+        {
+            die("Anti-forgery token can't be validated.");
+        }
+    }
 }

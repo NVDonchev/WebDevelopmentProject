@@ -19,4 +19,15 @@ class UsersRepository extends BaseRepository
 
         return false;
     }
+
+    public function takeMoneyFromCurrentUser($amount) {
+        $username = $_SESSION["username"];
+
+        foreach ($this->users as $index => $user) {
+            if ($user->username == $username) {
+                $this->users[$index]->cash -= $amount;
+                $_SESSION["users"][$index]->cash -= $amount;
+            }
+        }
+    }
 }

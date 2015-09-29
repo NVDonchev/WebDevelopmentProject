@@ -12,9 +12,9 @@ class CartController
         echo "Hello ! This is Shop Area CartController::hello() !";
     }
 
-    public function add()
+    public function addToCart()
     {
-        echo "Hello ! This is Shop Area CartController::add() !";
+        echo "Hello ! This is Shop Area CartController::addToCart() !";
     }
 }
 

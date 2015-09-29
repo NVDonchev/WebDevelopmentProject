@@ -2,10 +2,10 @@
 
 return array(
 	array(
-		'url' => 'addtocart',
+		'url' => 'testUrl',
 		'controller' => 'CartController',
-		'method' => 'add',
-		'area' => 'shop'
+		'method' => 'addToCart',
+		'area' => 'checkIt'
 	)
 );
 

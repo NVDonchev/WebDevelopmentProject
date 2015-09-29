@@ -1,6 +1,6 @@
 <?php
 
-class BuyProductBindingModel
+class ProductIdBindingModel
 {
     public $productId;
 }

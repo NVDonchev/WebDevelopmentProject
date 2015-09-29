@@ -18,4 +18,12 @@ class View
 
         include $viewPath;
     }
+
+    public function htmlSpecialCharsConditional($text, $isEscaping = true) {
+        if ($isEscaping) {
+            return htmlspecialchars($text);
+        }
+
+        return $text;
+    }
 }

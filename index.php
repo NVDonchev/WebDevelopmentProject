@@ -23,9 +23,12 @@ session_start();
 include "controllers".DS."baseController.php";
 
 include "bindingModels".DS."filterByCategoryBindingModel.php";
-include "bindingModels".DS."buyProductBindingModel.php";
+include "bindingModels".DS."ProductIdBindingModel.php";
 include "bindingModels".DS."LoginBindingModel.php";
 include "bindingModels".DS."RegisterBindingModel.php";
+
+include "viewModels".DS."ListProductsViewModel.php";
+include "viewModels".DS."CheckoutViewModel.php";
 
 // get route data
 $routeConfig = include "config".DS."routes.php";
@@ -62,12 +65,16 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
     $bindingClassProperties = $reflection->getProperties();
     $postProperties = $_POST;
 
+    if (isset($postProperties["my_token"])) {
+        unset($postProperties["my_token"]);
+    }
+
+    if (count($bindingClassProperties) !== count($postProperties)) {
+        die("Automatic binding of the post model failed for " . $bindingClass->name);
+    }
+
     foreach ($bindingClassProperties as $prop) {
         $propertyName = $prop->getName();
-
-        if (count($bindingClassProperties) !== count($postProperties)) {
-            die("Automatic binding of the post model failed for " . $bindingClass->name);
-        }
 
         $isModelBindingOk = false;
         foreach ($postProperties as $name => $value) {
@@ -110,14 +117,18 @@ if (isset($actionResult) && get_class($actionResult) === "View") {
 
         if (is_object($actionResult->model)) {
             if (get_class($actionResult->model) !== $expectedViewModel) {
-                die ("The view '" . explode(".", $view)[0] . "' expects a " . $expectedViewModel . " view model.
+                die ("The view '" . explode(".", $view)[0] . "' expects a " . $expectedViewModel . ".
                         The actual one is " . get_class($actionResult->model) . ".");
             }
+
+            $actionResult->render($viewPath);
         }
-
-        die ("The view '" . explode(".", $view)[0] . "' expects a " . $expectedViewModel . " view model.");
+        else {
+            die ("The view '" . explode(".", $view)[0] . "' expects a " . $expectedViewModel . ".");
+        }
     }
-
-    $actionResult->render($viewPath);
+    else {
+        $actionResult->render($viewPath);
+    }
 }
 ?>

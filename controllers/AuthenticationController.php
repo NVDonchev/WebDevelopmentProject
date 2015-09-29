@@ -15,6 +15,8 @@ class AuthenticationController extends BaseController
     }
 
     public function login(LoginBindingModel $model) {
+        $this->validateAntiForgeryToken();
+
         $loginSuccessful = $this->usersRepo->loginUser($model->username, $model->password);
         if ($loginSuccessful) {
             $this->redirectToUrl("../home");
@@ -25,6 +27,8 @@ class AuthenticationController extends BaseController
     }
 
     public function register(RegisterBindingModel $model) {
+        $this->validateAntiForgeryToken();
+
         // check if passwords match
         if (!$model->password === $model->confirmPassword) {
             die("Password and Confirm Password must match.");

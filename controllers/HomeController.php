@@ -18,31 +18,24 @@ class HomeController extends BaseController {
         }
 
         $uniqueCategories = $this->productsRepo->getCategoryNames();
-        return new View(array("products" => $allProducts, "categories" => $uniqueCategories));
+
+        $viewModel = new ListProductsViewModel();
+        $viewModel->products = $allProducts;
+        $viewModel->categories = $uniqueCategories;
+
+        return new View($viewModel);
 	}
 
     public function filterProductsByCategory(FilterByCategoryBindingModel $model)
     {
-        $productsByCategory = $this->productsRepo->getByCategory($model->category);
+        $productsByCategory = $this->productsRepo->getByCategory($model->category, $model->getOnlyAvailable);
         $uniqueCategories = $this->productsRepo->getCategoryNames();
 
-        return new View(array("products" => $productsByCategory, "categories" => $uniqueCategories));
-    }
+        $viewModel = new ListProductsViewModel();
+        $viewModel->products = $productsByCategory;
+        $viewModel->categories = $uniqueCategories;
 
-    public function buyProduct(BuyProductBindingModel $model) {
-        $productId = $model->productId;
-
-        $productToEdit = $this->productsRepo->getById($productId);
-        if ($productToEdit->quantity > 0) {
-            $productToEdit->quantity--;
-        }
-        else {
-            die("Cannot buy this product.");
-        }
-
-        $this->productsRepo->editProduct($productId, $productToEdit);
-
-        $this->redirectToUrl("../home");
+        return new View($viewModel);
     }
 }
 

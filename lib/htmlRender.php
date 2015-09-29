@@ -6,6 +6,7 @@ class htmlRender
         $elementHtml = '<form ';
         $elementHtml = htmlRender::setAttributes($elementHtml, $attributes);
         $elementHtml = $elementHtml . '>';
+        $elementHtml = $elementHtml . '<input type="hidden" name="my_token" id="my_token" value="' . $_SESSION['my_token'] . '" />';
 
         echo $elementHtml;
     }
@@ -25,7 +26,8 @@ class htmlRender
     }
 
     static public function checkBox($attributes) {
-        $elementHtml = '<input type="checkbox" ';
+        $elementHtml = '<input type="hidden" name="'.$attributes["name"].'" value="off">';
+        $elementHtml = $elementHtml. '<input type="checkbox" ';
         $elementHtml = htmlRender::setAttributes($elementHtml, $attributes);
         $elementHtml = $elementHtml . '>';
 
@@ -73,6 +75,11 @@ class htmlRender
         $elementHtml = $elementHtml . '>'.htmlRender::setContent($attributes).'</textarea>';
 
         echo $elementHtml;
+    }
+
+    static public function generateAntiForgeryToken() {
+        $data['my_token'] = md5(uniqid(rand(), true));
+        $_SESSION['my_token'] = $data['my_token'];
     }
 
     static private function setAttributes($elementHtml, $attributes) {

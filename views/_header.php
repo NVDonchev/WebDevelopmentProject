@@ -6,7 +6,6 @@
     <title>Shop</title>
 </head>
 
-
 <body>
 <div class="container">
 <?php if(isset($_SESSION["username"])) : ?>
