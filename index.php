@@ -128,7 +128,7 @@ if (isset($actionResult) && get_class($actionResult) === "View") {
 
         if (is_object($actionResult->model)) {
             if (get_class($actionResult->model) !== $expectedViewModel) {
-                die ("The view '" . explode(".", $view)[0] . "' expects a " . $expectedViewModel . ".
+                die ("The view '" . $viewPath . "' expects a " . $expectedViewModel . ".
                         The actual one is " . get_class($actionResult->model) . ".");
             }
 

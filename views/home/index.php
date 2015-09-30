@@ -33,10 +33,10 @@ htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
     </tr>
     <?php foreach( $model->products as $product ) :?>
         <tr>
-            <td><?php echo $product->name; ?></td>
-            <td><?php echo $product->price; ?></td>
-            <td><?php echo $product->category; ?></td>
-            <td><?php echo $product->quantity; ?></td>
+            <td><?php echo $this->htmlSpecialCharsConditional($product->name, false); ?></td>
+            <td><?php echo $this->htmlSpecialCharsConditional($product->price, false); ?></td>
+            <td><?php echo $this->htmlSpecialCharsConditional($product->category); ?></td>
+            <td><?php echo $this->htmlSpecialCharsConditional($product->quantity); ?></td>
             <td><?php htmlRender::radioButton(array("name" => "productId", "value" => $product->id))?></td>
         </tr>
     <?php endforeach; ?>
