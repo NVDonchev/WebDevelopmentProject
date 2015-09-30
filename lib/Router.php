@@ -43,8 +43,10 @@ class Router
 		// try custom routes
 		foreach ($routes as $route) {
             if ($hasArea) {
-                $normalizedUri = strstr($normalizedUri, "/");
-                $normalizedUri = substr($normalizedUri, 1);
+                if (strstr($normalizedUri, "/") !== false) {
+                    $normalizedUri = strstr($normalizedUri, "/");
+                    $normalizedUri = substr($normalizedUri, 1);
+                }
             }
 
             if (Router::startsWith($normalizedUri, $route["url"])) {

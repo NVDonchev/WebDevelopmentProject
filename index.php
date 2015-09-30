@@ -104,10 +104,21 @@ if (isset($actionResult) && get_class($actionResult) === "View") {
     $viewFolder = str_ireplace("Controller", "", $route['controller']);
     if (isset($actionResult->viewName)) {
         $view = $actionResult->viewName.".php";
-        $viewPath = PATH_TO_APP."views".DS.$viewFolder.DS.$actionResult->viewName.".php";
+
+        if(isset($route['area'])) {
+            $viewPath = PATH_TO_APP."areas".DS.$route['area'].DS."views".DS.$viewFolder.DS.$actionResult->viewName.".php";
+        }
+        else {
+            $viewPath = PATH_TO_APP."views".DS.$viewFolder.DS.$actionResult->viewName.".php";
+        }
     }
     else {
-        $viewPath = PATH_TO_APP."views".DS.$viewFolder.DS.$route['method'] . ".php";
+        if (isset($route['area'])) {
+            $viewPath = PATH_TO_APP."areas".DS.$route['area'].DS."views".DS.$viewFolder.DS.$route['method'] . ".php";
+        }
+        else {
+            $viewPath = PATH_TO_APP."views".DS.$viewFolder.DS.$route['method'] . ".php";
+        }
     }
 
     $expectedViewModel = AnnotationHelper::getViewModelType($viewPath);

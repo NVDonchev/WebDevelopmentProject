@@ -21,7 +21,7 @@ htmlRender::beginForm(array("action"=>"authentication/login", "method"=>"POST"))
 <br>
 <br>
 
-<?php htmlRender::beginForm(array("action"=>"authentication/register", "method"=>"POST")); ?>
+<?php htmlRender::beginForm(array("action"=>"authentication/register", "method"=>"POST", "id"=>"target")); ?>
     <table>
         <h3>Register Form</h3>
         <tr>

@@ -2,6 +2,8 @@
 
 class htmlRender
 {
+    static private $uniqueId;
+
     static public function beginForm($attributes) {
         $elementHtml = '<form ';
         $elementHtml = htmlRender::setAttributes($elementHtml, $attributes);
@@ -13,6 +15,49 @@ class htmlRender
 
     static public function endForm() {
         $elementHtml = '</form>';
+
+        echo $elementHtml;
+    }
+
+
+    static public function beginAjaxForm($attributes) {
+        if (!isset(htmlRender::$uniqueId)) {
+            htmlRender::$uniqueId = md5(uniqid());
+        }
+
+        $elementHtml = '<form data-formid="' . htmlRender::$uniqueId . '"';
+        $elementHtml = htmlRender::setAttributes($elementHtml, $attributes);
+        $elementHtml = $elementHtml . '>';
+
+        echo $elementHtml;
+    }
+
+    static public function endAjaxForm() {
+        $elementHtml = '</form>';
+
+        $singleQuote = "'";
+
+        $elementHtml = $elementHtml . '<script type="text/javascript" >' . "\n";
+
+        $elementHtml = $elementHtml . '$("form[data-formId=' . $singleQuote . htmlRender::$uniqueId . $singleQuote . ']").submit(function(event) {' . "\n";
+        $elementHtml = $elementHtml . 'event.preventDefault();' . "\n";
+
+        $elementHtml = $elementHtml . 'var inputObject = "{ ";' . "\n";
+        $elementHtml = $elementHtml . '$("form[data-formId=' . $singleQuote . htmlRender::$uniqueId . $singleQuote . '] input").each(function() {' . "\n";
+        $elementHtml = $elementHtml . 'var nameValue = $(this).attr("name");' . "\n";
+        $elementHtml = $elementHtml . 'inputObject += "\"" + nameValue + "\"" + ": " + "\"" + $("input[name=' . $singleQuote . '" + nameValue + "' . $singleQuote . ']").val() + "\"" + ", ";' . "\n";
+        $elementHtml = $elementHtml . '})' . "\n";
+        $elementHtml = $elementHtml . 'inputObject = inputObject.slice(0,-2)' . "\n";
+        $elementHtml = $elementHtml . 'inputObject += " }";' . "\n";
+
+        $elementHtml = $elementHtml . 'var jsonObject = jQuery.parseJSON(inputObject);' . "\n";
+
+        $elementHtml = $elementHtml . 'var $form = $(this);' . "\n";
+        $elementHtml = $elementHtml . 'var url = $form.attr( "action" );' . "\n";
+        $elementHtml = $elementHtml . 'var posting = $.post( url, jsonObject );' . "\n";
+        $elementHtml = $elementHtml . '})';
+
+        $elementHtml = $elementHtml . '</script>' . "\n";
 
         echo $elementHtml;
     }
