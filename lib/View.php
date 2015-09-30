@@ -5,7 +5,7 @@ class View
     public $model;
     public $viewName;
 
-    function __construct($model, $viewName = null) {
+    function __construct($model = null, $viewName = null) {
         $this->model = $model;
 
         if (isset($viewName)) {
