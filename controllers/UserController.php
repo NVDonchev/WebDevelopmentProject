@@ -11,7 +11,8 @@ class UserController extends BaseController
     }
 
     function showProfile() {
+        $user = $this->usersRepo->getCurrentUser();
 
-        return new View();
+        return new View($user);
     }
 }

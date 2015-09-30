@@ -7,6 +7,7 @@ class User  {
     public $lastName;
     public $cash;
     public $role;
+    public $products;
 
     function __construct($username, $password, $cash, $role, $firstName, $lastName) {
         $this->username = $username;

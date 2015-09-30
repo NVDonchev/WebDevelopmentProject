@@ -66,6 +66,7 @@ class CartController extends BaseController {
         }
 
         $this->usersRepo->takeMoneyFromCurrentUser($price);
+        $this->usersRepo->setUserProducts($products);
         $this->cartRepo->emptyCart();
 
         return new View(null, "transactionSuccessful");

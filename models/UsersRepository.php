@@ -30,4 +30,41 @@ class UsersRepository extends BaseRepository
             }
         }
     }
+
+    public function getCurrentUser() {
+        $username = $_SESSION["username"];
+
+        foreach ($this->users as $index => $user) {
+            if ($user->username == $username) {
+                return $user;
+            }
+        }
+    }
+
+    public function setUserProducts($products) {
+        $username = $_SESSION["username"];
+
+        foreach ($this->users as $index => $user) {
+            if ($user->username === $username) {
+                if (isset($this->users[$index]->products)) {
+                    $this->users[$index]->products = array_merge($this->users[$index]->products, $products);
+                }
+                else {
+                    $this->users[$index]->products = $products;
+                }
+
+                return;
+            }
+        }
+    }
+
+    public function getUserProducts() {
+        $username = $_SESSION["username"];
+
+        foreach ($this->users as $index => $user) {
+            if ($user->username == $username) {
+                return $user->products;
+            }
+        }
+    }
 }

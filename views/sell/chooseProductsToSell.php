@@ -1,28 +1,5 @@
-<!-- Model: ViewModels/ListProductsViewModel -->
 
 <?php include PATH_TO_APP . "views/_header.php"; ?>
-
-<a href="user/showProfile" class="btn btn-info">Show User Profile</a><br><br>
-
-<a href="cart/showCart" class="btn btn-info">View Cart</a><br><br>
-
-<h3>Products Catalog</h3>
-
-<?php
-$categoriesArray = array();
-foreach($model->categories as $category) {
-    array_push($categoriesArray, array("value"=>$category, "content"=>ucfirst($category)));
-}
-
-htmlRender::beginForm(array("action"=>"home/filterProductsByCategory", "method"=>"POST"));
-htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
-?>
-&nbsp;<input type="submit" value="Filter" class="btn btn-default"><br>
-<?php htmlRender::checkBox(array("name"=>"getOnlyAvailable"));?> <label>Available only</label>
-<?php htmlRender::endForm(); ?>
-
-<br>
-<br>
 
 <?php htmlRender::beginForm(array("action"=>"cart/addToCart", "method"=>"POST")); ?>
 <table class="table">
