@@ -1,7 +1,8 @@
 
 <?php include PATH_TO_APP . "views/_header.php"; ?>
 
-<?php htmlRender::beginForm(array("action"=>"cart/addToCart", "method"=>"POST")); ?>
+<?php if(count($model->products) > 0) : ?>
+<?php htmlRender::beginForm(array("action"=>"sellProduct", "method"=>"POST")); ?>
 <table class="table">
     <tr>
         <th>Name</th>
@@ -21,8 +22,14 @@
     <?php endforeach; ?>
 </table>
 <br>
-<input type="submit" value="Add to Cart" class="btn btn-success"><br>
+<input type="submit" value="Sell Product" class="btn btn-success"><br>
 <?php htmlRender::endForm(); ?>
+
+<?php else : ?>
+    <h3>You have no products for selling</h3>
+<?php endif; ?>
+
 <br>
+<label>Cash: <?php echo $model->userCash ?></label>
 
 <?php include PATH_TO_APP . "views/_footer.php"; ?>

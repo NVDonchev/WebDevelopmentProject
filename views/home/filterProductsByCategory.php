@@ -3,8 +3,6 @@
 
 <?php include PATH_TO_APP . "views/_header.php"; ?>
 
-<a href="../cart/showCart" class="btn btn-info">View Cart</a><br><br>
-
 <h3>Filtered Products</h3>
 
 <?php

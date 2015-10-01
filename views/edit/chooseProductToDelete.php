@@ -1,26 +1,7 @@
-<!-- Model: ViewModels/ListProductsViewModel -->
 
 <?php include PATH_TO_APP . "views/_header.php"; ?>
 
-<h3>Products Catalog</h3>
-
-<?php
-$categoriesArray = array();
-foreach($model->categories as $category) {
-    array_push($categoriesArray, array("value"=>$category, "content"=>ucfirst($category)));
-}
-
-htmlRender::beginForm(array("action"=>"home/filterProductsByCategory", "method"=>"POST"));
-htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
-?>
-&nbsp;<input type="submit" value="Filter" class="btn btn-default"><br>
-<?php htmlRender::checkBox(array("name"=>"getOnlyAvailable"));?> <label>Available only</label>
-<?php htmlRender::endForm(); ?>
-
-<br>
-<br>
-
-<?php htmlRender::beginForm(array("action"=>"cart/addToCart", "method"=>"POST")); ?>
+<?php htmlRender::beginForm(array("action"=>"deleteProduct", "method"=>"POST")); ?>
 <table class="table">
     <tr>
         <th>Name</th>
@@ -29,7 +10,7 @@ htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
         <th>Quantity</th>
         <th>Select</th>
     </tr>
-    <?php foreach( $model->products as $product ) :?>
+    <?php foreach( $model as $product ) :?>
         <tr>
             <td><?php echo $this->htmlSpecialCharsConditional($product->name, false); ?></td>
             <td><?php echo $this->htmlSpecialCharsConditional($product->price, false); ?></td>
@@ -40,7 +21,7 @@ htmlRender::DropDown(array("name"=>"category"), $categoriesArray);
     <?php endforeach; ?>
 </table>
 <br>
-<input type="submit" value="Add to Cart" class="btn btn-success"><br>
+<input type="submit" value="Delete Product" class="btn btn-success"><br>
 <?php htmlRender::endForm(); ?>
 <br>
 

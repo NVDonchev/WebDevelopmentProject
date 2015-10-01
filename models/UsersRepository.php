@@ -11,13 +11,17 @@ class UsersRepository extends BaseRepository
         foreach ($this->users as $user) {
             if ($user->username === $username && $user->password === $password) {
                 $_SESSION["username"] = $username;
-                $_SESSION["isAdmin"] = ($user->role === "admin");
+                $_SESSION["userRole"] = $user->role;
 
                 return true;
             }
         }
 
         return false;
+    }
+
+    public function getAll() {
+        return $this->users;
     }
 
     public function takeMoneyFromCurrentUser($amount) {
@@ -31,12 +35,39 @@ class UsersRepository extends BaseRepository
         }
     }
 
+    public function giveMoneyToCurrentUser($amount) {
+        $username = $_SESSION["username"];
+
+        foreach ($this->users as $index => $user) {
+            if ($user->username == $username) {
+                $this->users[$index]->cash += $amount;
+            }
+        }
+    }
+
     public function getCurrentUser() {
         $username = $_SESSION["username"];
 
         foreach ($this->users as $index => $user) {
             if ($user->username == $username) {
                 return $user;
+            }
+        }
+    }
+
+    public function getUser($username) {
+        foreach ($this->users as $index => $user) {
+            if ($user->username === $username) {
+                return $user;
+            }
+        }
+    }
+
+    public function editUserRole($username, $role) {
+        foreach ($this->users as $index => $user) {
+            if ($user->username === $username) {
+                $this->users[$index]->role = $role;
+                return;
             }
         }
     }
@@ -64,6 +95,20 @@ class UsersRepository extends BaseRepository
         foreach ($this->users as $index => $user) {
             if ($user->username == $username) {
                 return $user->products;
+            }
+        }
+    }
+
+    public function removeUserProduct($productId) {
+        $username = $_SESSION["username"];
+
+        foreach ($this->users as $index => $user) {
+            if ($user->username == $username) {
+                foreach ($user->products as $index => $product) {
+                    if ($product->id == $productId) {
+                        unset($user->products[$index]);
+                    }
+                }
             }
         }
     }

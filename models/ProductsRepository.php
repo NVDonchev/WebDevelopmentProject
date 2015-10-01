@@ -50,5 +50,34 @@ class ProductsRepository extends BaseRepository
                 $this->products[$index] = $editedProduct;
             }
         }
+
+        $_SESSION["products"] = $this->products;
+    }
+
+    public function addProduct($productToAdd) {
+        $id = -1;
+        foreach($this->products as $product) {
+            if (strtolower($product->name) === strtolower($productToAdd->name)) {
+                die("This product already exists");
+            }
+
+            if ($id < $product->id) {
+                $id = $product->id;
+            }
+        }
+
+        $productToAdd->id = $id;
+
+        array_push($this->products, $productToAdd);
+        array_push($_SESSION["products"], $productToAdd);
+    }
+
+    public function deleteProduct($productId) {
+        foreach ($this->products as $index => $product) {
+            if ($product->id == $productId) {
+                unset($this->products[$index]);
+                unset($_SESSION["products"][$index]);
+            }
+        }
     }
 }

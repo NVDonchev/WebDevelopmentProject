@@ -1,8 +1,6 @@
 
 <?php include PATH_TO_APP . "views/_header.php"; ?>
 
-<a href="../home" class="btn btn-info">HOME</a><br><br>
-
 <?php if(count($model) > 0) : ?>
 
 <table class="table">

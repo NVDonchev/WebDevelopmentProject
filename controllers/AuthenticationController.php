@@ -55,7 +55,7 @@ class AuthenticationController extends BaseController
 
     public function logout() {
         unset($_SESSION["username"]);
-        unset($_SESSION["isAdmin"]);
+        unset($_SESSION["userRole"]);
 
         $this->redirectToUrl("../authentication");
     }

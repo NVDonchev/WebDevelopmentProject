@@ -27,7 +27,15 @@ abstract class BaseController {
     }
 
     protected function isAdmin() {
-        return isset($_SESSION['isAdmin']);
+        if (isset($_SESSION['userRole'])) {
+            return ($_SESSION['userRole'] === "admin");
+        }
+    }
+
+    protected function isEditor() {
+        if (isset($_SESSION['userRole'])) {
+            return ($_SESSION['userRole'] === "editor");
+        }
     }
 
     protected function validateAntiForgeryToken() {

@@ -26,9 +26,18 @@ include "bindingModels".DS."filterByCategoryBindingModel.php";
 include "bindingModels".DS."ProductIdBindingModel.php";
 include "bindingModels".DS."LoginBindingModel.php";
 include "bindingModels".DS."RegisterBindingModel.php";
+include "bindingModels".DS."ManageUserBindingModel.php";
+include "bindingModels".DS."AddProductBindingModel.php";
+include "bindingModels".DS."AddCategoryBindingModel.php";
+include "bindingModels".DS."DeleteCategoryBindingModel.php";
+include "bindingModels".DS."MoveToCategoryBindingModel.php";
+include "bindingModels".DS."QuantityChangedBindingModel.php";
 
 include "viewModels".DS."ListProductsViewModel.php";
 include "viewModels".DS."CheckoutViewModel.php";
+include "viewModels".DS."chooseProductsToSellViewModel.php";
+include "viewModels".DS."ChooseProductToMoveToCategoryViewModel.php";
+include "viewModels".DS."MoveProductToCategoryViewModel.php";
 
 // get route data
 $routeConfig = include "config".DS."routes.php";
